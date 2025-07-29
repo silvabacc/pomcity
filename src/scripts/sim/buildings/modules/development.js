@@ -1,13 +1,13 @@
-import config from '../../../config.js';
-import { City } from '../../city.js';
-import { Zone } from '../../buildings/zones/zone.js';
-import { SimModule } from './simModule.js';
+import config from "../../../config.js";
+import { City } from "../../city.js";
+import { Zone } from "../../buildings/zones/zone.js";
+import { SimModule } from "./simModule.js";
 
 export const DevelopmentState = {
-  abandoned: 'abandoned',
-  developed: 'developed',
-  underConstruction: 'under-construction',
-  undeveloped: 'undeveloped',
+  abandoned: "abandoned",
+  developed: "developed",
+  underConstruction: "under-construction",
+  undeveloped: "undeveloped",
 };
 
 export class DevelopmentModule extends SimModule {
@@ -49,8 +49,8 @@ export class DevelopmentModule extends SimModule {
   #zone;
 
   /**
-   * 
-   * @param {Zone} zone 
+   *
+   * @param {Zone} zone
    */
   constructor(zone) {
     super();
@@ -76,33 +76,43 @@ export class DevelopmentModule extends SimModule {
   }
 
   /**
-   * @param {City} city 
+   * @param {City} city
    */
   simulate(city) {
     this.#checkAbandonmentCriteria();
 
     switch (this.state) {
       case DevelopmentState.undeveloped:
-        if (this.#checkDevelopmentCriteria() &&
-          Math.random() < config.modules.development.redevelopChance) {
+        if (
+          this.#checkDevelopmentCriteria() &&
+          Math.random() < config.modules.development.redevelopChance
+        ) {
           this.state = DevelopmentState.underConstruction;
           this.#constructionCounter = 0;
         }
         break;
       case DevelopmentState.underConstruction:
-        if (++this.#constructionCounter === config.modules.development.constructionTime) {
+        if (
+          ++this.#constructionCounter ===
+          config.modules.development.constructionTime
+        ) {
           this.state = DevelopmentState.developed;
           this.level = 1;
           this.#constructionCounter = 0;
         }
         break;
       case DevelopmentState.developed:
-        if (this.#abandonmentCounter > config.modules.development.abandonThreshold) {
+        if (
+          this.#abandonmentCounter > config.modules.development.abandonThreshold
+        ) {
           if (Math.random() < config.modules.development.abandonChance) {
             this.state = DevelopmentState.abandoned;
           }
         } else {
-          if (this.level < this.maxLevel && Math.random() < config.modules.development.levelUpChance) {
+          if (
+            this.level < this.maxLevel &&
+            Math.random() < config.modules.development.levelUpChance
+          ) {
             this.level++;
           }
         }
@@ -118,19 +128,16 @@ export class DevelopmentModule extends SimModule {
   }
 
   /**
-   * @param {City} city 
-   * @returns 
+   * @param {City} city
+   * @returns
    */
   #checkDevelopmentCriteria() {
-    return (
-      this.#zone.roadAccess.value && 
-      this.#zone.power.isFullyPowered
-    );
+    return this.#zone.roadAccess.value;
   }
 
   /**
-   * @param {City} city 
-   * @returns 
+   * @param {City} city
+   * @returns
    */
   #checkAbandonmentCriteria() {
     if (!this.#checkDevelopmentCriteria()) {
@@ -144,13 +151,13 @@ export class DevelopmentModule extends SimModule {
    * Returns an HTML representation of this object
    * @returns {string}
    */
-    toHTML() {
-      return `
+  toHTML() {
+    return `
         <span class="info-label">State </span>
         <span class="info-value">${this.state}</span>
         <br>
         <span class="info-label">Level </span>
         <span class="info-value">${this.level}</span>
         <br>`;
-    }
+  }
 }

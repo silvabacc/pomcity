@@ -1,14 +1,15 @@
 @font-face {
   font-family: Bebas-Regular;
-  src: url('fonts/Bebas-Regular.otf');
+  src: url("fonts/Bebas-Regular.otf");
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   font-family: Bebas-Regular, sans-serif;
 
-  background: linear-gradient(0deg, #3a5177, #81b1e0);
+  background: #fff8ea;
 }
 
 h1 {
@@ -80,7 +81,7 @@ h1 {
   margin: 4px 0;
 
   transition: background-color 0.1s ease-in-out;
-  
+
   background-color: #1e2331cd;
   border: none;
   border-radius: 8px;
@@ -161,7 +162,7 @@ h1 {
   position: fixed;
   top: 64px;
   right: 0px;
-  padding: 0; 
+  padding: 0;
   padding-bottom: 16px;
   width: 300px;
 
@@ -189,7 +190,7 @@ h1 {
 .info-label {
   margin-left: 12px;
   font-size: 1em;
-  color: rgb(193, 193, 193)
+  color: rgb(193, 193, 193);
 }
 
 .info-value {

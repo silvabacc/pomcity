@@ -1,10 +1,9 @@
-import * as THREE from 'three';
-import { BuildingType } from './buildings/buildingType.js';
-import { createBuilding } from './buildings/buildingFactory.js';
-import { Tile } from './tile.js';
-import { VehicleGraph } from './vehicles/vehicleGraph.js';
-import { PowerService } from './services/power.js';
-import { SimService } from './services/simService.js';
+import * as THREE from "three";
+import { BuildingType } from "./buildings/buildingType.js";
+import { createBuilding } from "./buildings/buildingFactory.js";
+import { Tile } from "./tile.js";
+import { VehicleGraph } from "./vehicles/vehicleGraph.js";
+import { SimService } from "./services/simService.js";
 
 export class City extends THREE.Group {
   /**
@@ -14,7 +13,7 @@ export class City extends THREE.Group {
    */
   debugMeshes = new THREE.Group();
   /**
-   * Root node for all scene objects 
+   * Root node for all scene objects
    * @type {THREE.Group}
    */
   root = new THREE.Group();
@@ -38,17 +37,17 @@ export class City extends THREE.Group {
    */
   tiles = [];
   /**
-   * 
-   * @param {VehicleGraph} size 
+   *
+   * @param {VehicleGraph} size
    */
   vehicleGraph;
 
-  constructor(size, name = 'My City') {
+  constructor(size, name = "My City") {
     super();
 
     this.name = name;
     this.size = size;
-    
+
     this.add(this.debugMeshes);
     this.add(this.root);
 
@@ -65,8 +64,7 @@ export class City extends THREE.Group {
     }
 
     this.services = [];
-    this.services.push(new PowerService());
-    
+
     this.vehicleGraph = new VehicleGraph(this.size);
     this.debugMeshes.add(this.vehicleGraph);
   }
@@ -93,9 +91,14 @@ export class City extends THREE.Group {
    * @returns {Tile | null}
    */
   getTile(x, y) {
-    if (x === undefined || y === undefined ||
-      x < 0 || y < 0 ||
-      x >= this.size || y >= this.size) {
+    if (
+      x === undefined ||
+      y === undefined ||
+      x < 0 ||
+      y < 0 ||
+      x >= this.size ||
+      y >= this.size
+    ) {
       return null;
     } else {
       return this.tiles[x][y];
@@ -125,9 +128,9 @@ export class City extends THREE.Group {
   /**
    * Places a building at the specified coordinates if the
    * tile does not already have a building on it
-   * @param {number} x 
-   * @param {number} y 
-   * @param {string} buildingType 
+   * @param {number} x
+   * @param {number} y
+   * @param {string} buildingType
    */
   placeBuilding(x, y, buildingType) {
     const tile = this.getTile(x, y);
@@ -136,7 +139,7 @@ export class City extends THREE.Group {
     if (tile && !tile.building) {
       tile.setBuilding(createBuilding(x, y, buildingType));
       tile.refreshView(this);
-      
+
       // Update buildings on adjacent tile in case they need to
       // change their mesh (e.g. roads)
       this.getTile(x - 1, y)?.refreshView(this);
@@ -152,7 +155,7 @@ export class City extends THREE.Group {
 
   /**
    * Bulldozes the building at the specified coordinates
-   * @param {number} x 
+   * @param {number} x
    * @param {number} y
    */
   bulldoze(x, y) {
@@ -213,7 +216,7 @@ export class City extends THREE.Group {
       // Add this tiles neighbor's to the search list
       tilesToSearch.push(...this.getTileNeighbors(tile.x, tile.y));
 
-      // If this tile passes the criteria 
+      // If this tile passes the criteria
       if (filter(tile)) {
         return tile;
       }
